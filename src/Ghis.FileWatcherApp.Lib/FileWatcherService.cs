@@ -1,13 +1,20 @@
 ﻿namespace Ghis.FileWatcherApp.Lib
 {
-    using System.Drawing;
+    using Spectre.Console;
+
 
     public class FileWatcherService : IFileWatcherService, IDisposable
     {
-        private FileSystemWatcher fileSystemWatcher;
+        private readonly IConsoleWriterService consoleWriterService;
+        public FileWatcherService(IConsoleWriterService consoleWriterService)
+        {
+            this.consoleWriterService = consoleWriterService;
+        }
+        private FileSystemWatcher? fileSystemWatcher;
+
         public void StartWatch(string fullPath, bool includeSubdirectories = true, string filter = "*.txt")
         {
-            Console.WriteLine($"StartWatch: {fullPath}");
+         
             this.fileSystemWatcher = new FileSystemWatcher(fullPath);
             fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes
                            | NotifyFilters.CreationTime
@@ -28,7 +35,6 @@
 
             fileSystemWatcher.IncludeSubdirectories = includeSubdirectories;
             fileSystemWatcher.EnableRaisingEvents = true;
-
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
@@ -37,42 +43,20 @@
             {
                 return;
             }
-            Console.WriteLine($"Changed: {e.FullPath}", Color.Yellow);
+
+            this.consoleWriterService.PrintLn($"Changed: {e.FullPath}");
         }
 
-        private void OnCreated(object sender, FileSystemEventArgs e)
-        {
-            
-            Console.WriteLine($"Created: {e.FullPath}", Color.Green);
-        }
+        private void OnCreated(object sender, FileSystemEventArgs e) => this.consoleWriterService.PrintLn($"Created: {e.FullPath}");
 
-        private void OnDeleted(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"Deleted: {e.FullPath}", Color.Red);
+        private void OnDeleted(object sender, FileSystemEventArgs e) => this.consoleWriterService.PrintLn($"Deleted: {e.FullPath}");
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            Console.WriteLine($"Renamed:");
-            Console.WriteLine($"    Old: {e.OldFullPath}", Color.Orange);
-            Console.WriteLine($"    New: {e.FullPath}",Color.Orange);
+            this.consoleWriterService.PrintLn($"Renamed:",$"    Old: {e.OldFullPath}",$"    New: {e.FullPath}");
         }
 
-        private void OnError(object sender, ErrorEventArgs e) =>
-            PrintException(e.GetException());
-
-        private void PrintException(Exception? ex)
-        {
-            if (ex is null)
-            {
-                return;
-            }
-            
-                Console.WriteLine($"Message: {ex.Message}");
-                Console.WriteLine("Stacktrace:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine();
-                PrintException(ex.InnerException);
-            
-        }
+        private void OnError(object sender, ErrorEventArgs e) => this.consoleWriterService.PrintException(e.GetException());
 
         public void Dispose()
         {
