@@ -1,26 +1,11 @@
-```
-_______________
-|
-|
-|
-|       ____________
-|                   |
-|                   |
-|                   |
-|___________________|
+# Protocol
+##  Metatrader4ClientApp
+-  CI for Console App ==> workflows
+- Usage of file_header_template  in .editorconfig
+- Usage of .editorconfig for VS2022
 
-
-```
-
-# Ghis.Controls
-A Container of  some pretty and commonly used WPF controls 
-
-# How to use it
-* Add Add the Ghis.Windows.Controls NuGet package 
-* Setup xmlns:ghis="clr-namespace:Ghis.Windows.Controls;assembly=Ghis.Windows.Controls" in your desired xaml file
-* Use any controls e.g. 
-``` xaml
- <Grid>
-        <ghis:GhisBusyIndicator IsBusy="True" />
- </Grid>
-```
+##   Spectre Console
+-  https://github.com/spectreconsole/spectre.console
+-  Usage of project structure in appconsole
+-  CI for Console App ==> workflows
+-  Sample of tests using XUnit
