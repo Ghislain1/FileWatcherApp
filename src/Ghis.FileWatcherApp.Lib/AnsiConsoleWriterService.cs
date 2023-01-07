@@ -126,15 +126,7 @@ namespace Ghis.FileWatcherApp.Lib
             Console.WriteLine();
             this.PrintException(ex.InnerException);
         }
-        public void PrintLn(params string[] messages)
-        {
-            foreach (var item in messages)
-            {
-                this.PrintLn(item);
-                this.messageToPrints.Add(item); 
-            }
-           
-        }
+       
 
         public void PrintLn(FileInfoDataModel fileInfoDataModel)
         {
@@ -154,7 +146,7 @@ namespace Ghis.FileWatcherApp.Lib
             //  AnsiConsole.MarkupLine(this.fileInfoDataModel.Message);
         }
 
-        public List<string> messageToPrints = new List<string>();
+       
         public void PrintLn(string message)
         {
 

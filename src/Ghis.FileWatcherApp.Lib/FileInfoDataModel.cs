@@ -16,7 +16,7 @@ namespace Ghis.FileWatcherApp.Lib
 
     public class FileInfoDataModel
     {
-        public FileInfoDataModel(string fullPath,  WatcherColorNameTypes? watcherColorNameTypes =null, string message = "" )
+        public FileInfoDataModel(string fullPath,  WatcherColorNameTypes? watcherColorNameTypes =null, string message = "", string caption = "")
         {
             var fileInfo = new FileInfo(fullPath);
             this.CreationTime = fileInfo.CreationTime.ToString();
@@ -27,6 +27,7 @@ namespace Ghis.FileWatcherApp.Lib
             this.Security = "TODO";
             this.WatcherColorNameTypes = watcherColorNameTypes;
             this.Message = message;
+            this.Caption = caption;
 
         }
         public string OldFullPath { get; set; }
@@ -40,5 +41,6 @@ namespace Ghis.FileWatcherApp.Lib
 
         public WatcherColorNameTypes? WatcherColorNameTypes { get; }
         public string Message { get; set; }
+        public string Caption { get;  }
     }
 }

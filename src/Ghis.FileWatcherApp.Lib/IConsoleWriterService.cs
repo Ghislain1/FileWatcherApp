@@ -19,9 +19,7 @@ namespace Ghis.FileWatcherApp.Lib
 
         void PrintException(Exception? ex);
 
-        void PrintLn(string message);
-        void PrintLn(params string [] messages);
-
+  
         void PrintLn(FileInfoDataModel fileInfoDataModel);  
     }
 }
