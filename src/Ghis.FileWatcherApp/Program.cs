@@ -17,16 +17,17 @@ public class MyClassCS
     static void Main()
     {
         var pathFolder = @"C:\Users\Zoe\Documents\SubMain";
-        //var consoleWriterService = new StandardConsoleWriterService();
-        var consoleWriterService = new AnsiConsoleWriterService();
+        var consoleWriterService = new StandardConsoleWriterService();
+       // var consoleWriterService = new AnsiConsoleWriterService();
         using (var fileWatcherService = new FileWatcherService(consoleWriterService))
         {
             fileWatcherService.StartWatch(pathFolder, true, "*.txt");
 
-            Console.WriteLine("\nPress \'q\' to exit.");
-            Console.Write("> ");
+           // Console.WriteLine("\nPress \'q\' to exit.");
+             //Console.WriteLine(" ");
+            Console.Read();
             //Make an infinite loop till 'q' is pressed.  
-            while (Console.Read() != 'q') ;
+             while (Console.Read() != 'q') ;
         }
 
     }

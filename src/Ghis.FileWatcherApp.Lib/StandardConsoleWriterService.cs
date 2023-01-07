@@ -33,12 +33,21 @@ namespace Ghis.FileWatcherApp.Lib
 
         public void PrintLn(string message) =>           Console.WriteLine(message);
 
-        public void PrintLn(params string[] messages)
+        public void PrintLn(params string[]? messages)
         {
             foreach (var item in messages)
             {
                 this.PrintLn(item);
             }
+        }
+
+        public   void PrintLn(FileInfoDataModel fileInfoDataModel)
+        {
+            if(fileInfoDataModel is null)
+            {
+                return ;
+            }
+            PrintLn(  fileInfoDataModel?.CreationTime, fileInfoDataModel?.LastAccess, fileInfoDataModel?.FileName);
         }
 
     }

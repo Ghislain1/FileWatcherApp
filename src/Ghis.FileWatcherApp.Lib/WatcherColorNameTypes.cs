@@ -14,14 +14,11 @@ namespace Ghis.FileWatcherApp.Lib
     using System.Text;
     using System.Threading.Tasks;
 
-    public  interface IConsoleWriterService
+    public enum WatcherColorNameTypes
     {
-
-        void PrintException(Exception? ex);
-
-        void PrintLn(string message);
-        void PrintLn(params string [] messages);
-
-        void PrintLn(FileInfoDataModel fileInfoDataModel);  
+        Red, // OnDeleted
+        Yellow,// OnRename
+        Green,// OnCreated
+        Orange ,// OnChanged
     }
 }

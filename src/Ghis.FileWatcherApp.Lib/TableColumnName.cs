@@ -14,14 +14,13 @@ namespace Ghis.FileWatcherApp.Lib
     using System.Text;
     using System.Threading.Tasks;
 
-    public  interface IConsoleWriterService
+    public enum TableColumnName
     {
-
-        void PrintException(Exception? ex);
-
-        void PrintLn(string message);
-        void PrintLn(params string [] messages);
-
-        void PrintLn(FileInfoDataModel fileInfoDataModel);  
+        CreationTime,
+        DirectoryName,
+        FileName,
+        LastAccess,
+        LastWrite,
+        Security
     }
 }
