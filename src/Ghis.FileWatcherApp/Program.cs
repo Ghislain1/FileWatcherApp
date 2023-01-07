@@ -17,12 +17,14 @@ public class MyClassCS
     static void Main()
     {
         var pathFolder = @"C:\Users\Zoe\Documents\SubMain";
-       // using var watcher = new FileSystemWatcher();
+        
         var fileWatcherService = new FileWatcherService();
-        fileWatcherService.StartWatch(pathFolder);
-
-        Console.WriteLine("Press enter to exit.");
-        Console.ReadLine();
+        fileWatcherService.StartWatch(pathFolder, true, "*.txt");
+  
+        Console.WriteLine("Press \'q\' to exit.");       
+        Console.Write("> ");
+        //Make an infinite loop till 'q' is pressed.  
+        while (Console.Read() != 'q') ;
     }
 
   
