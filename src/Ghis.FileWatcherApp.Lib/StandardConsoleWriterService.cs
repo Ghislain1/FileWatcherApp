@@ -57,7 +57,7 @@ namespace Ghis.FileWatcherApp.Lib
 
         }
         private   FileInfoDataModel fileInfoDataModel;
-        public void PrintLn(FileInfoDataModel fileInfoDataModel)
+        public void  PrintLn(FileInfoDataModel fileInfoDataModel)
         {
             if(fileInfoDataModel is null)
             {

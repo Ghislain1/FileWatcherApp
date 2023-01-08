@@ -11,15 +11,16 @@ namespace Ghis.FileWatcherApp;
 
 using Ghis.FileWatcherApp.Lib;
 using System.Runtime.CompilerServices;
-
+using Ghis.FileWatcherApp.Lib.Locking;
 public class MyClassCS
 {
     static void Main()
     {
         var pathFolder = @"C:\Users\Zoe\Documents\SubMain";
-        var consoleWriterService = new StandardConsoleWriterService();
-       // var consoleWriterService = new AnsiConsoleWriterService();
-        using (var fileWatcherService = new FileWatcherService(consoleWriterService))
+        var consoleWriterService = new StandardConsoleWriterService();    
+        var  lockFileService  = new LockFileService();
+        // var consoleWriterService = new AnsiConsoleWriterService();
+        using (var fileWatcherService = new FileWatcherService(consoleWriterService, lockFileService))
         {
             fileWatcherService.StartWatch(pathFolder, true, "*.txt");
 
@@ -28,6 +29,7 @@ public class MyClassCS
             Console.Read();
             //Make an infinite loop till 'q' is pressed.  
              while (Console.Read() != 'q') ;
+          
         }
 
     }
