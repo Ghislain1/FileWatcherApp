@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ghis.FileWatcherApp.Lib", "Ghis.FileWatcherApp.Lib\Ghis.FileWatcherApp.Lib.csproj", "{F987C966-D58E-41FC-9729-1296A1DF143C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ghis.FileWatcherApp", "Ghis.FileWatcherApp\Ghis.FileWatcherApp.csproj", "{C1E7BD09-85CA-44BA-AECB-ED74FF290653}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ghis.FileWatcherApp", "Ghis.FileWatcherApp\Ghis.FileWatcherApp.csproj", "{C1E7BD09-85CA-44BA-AECB-ED74FF290653}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ghis.FileWatcherApp.Lib.Tests", "..\test\Ghis.FileWatcherApp.Lib.Tests\Ghis.FileWatcherApp.Lib.Tests.csproj", "{D3DDF9E9-4D3E-43AA-93B7-265AFB31FEE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C1E7BD09-85CA-44BA-AECB-ED74FF290653}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E7BD09-85CA-44BA-AECB-ED74FF290653}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1E7BD09-85CA-44BA-AECB-ED74FF290653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3DDF9E9-4D3E-43AA-93B7-265AFB31FEE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3DDF9E9-4D3E-43AA-93B7-265AFB31FEE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3DDF9E9-4D3E-43AA-93B7-265AFB31FEE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3DDF9E9-4D3E-43AA-93B7-265AFB31FEE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

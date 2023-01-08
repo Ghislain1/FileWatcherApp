@@ -1,4 +1,8 @@
 # Protocol
+## UniTest with xUnit
+- https://github.com/spectreconsole/spectre.console ==>  Sample of tests using XUnit
+- https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test ==> simple getting started
+- 
 ##  Metatrader4ClientApp
 - https://github.com/Ghislain1/Metatrader4ClientApp
 - CI for Console App ==> workflows
