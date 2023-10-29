@@ -6,20 +6,16 @@
 //  writing by an officer of Ghis. All Rights Reserved.
 // </copyright>
 
-namespace Ghis.FileWatcherApp.Lib
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+namespace Ghis.FileWatcherApp.Lib;
 
-    public  interface IConsoleWriterService
-    {
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-        void PrintException(Exception? ex);
-
-  
-        void PrintLn(FileInfoDataModel fileInfoDataModel);  
-    }
+public interface IWriterService
+{ 
+    void PrintException(Exception? ex);
+    void PrintLn(FileInfoDataModel fileInfoDataModel);
 }

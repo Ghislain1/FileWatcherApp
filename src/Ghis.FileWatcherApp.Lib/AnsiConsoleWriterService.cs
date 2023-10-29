@@ -17,7 +17,7 @@ namespace Ghis.FileWatcherApp.Lib
     using System.Text;
     using System.Threading.Tasks;
 
-    public class AnsiConsoleWriterService : IConsoleWriterService
+    public class AnsiConsoleWriterService : IWriterService
     {
         private FileInfoDataModel? fileInfoDataModel;
 
@@ -151,6 +151,11 @@ namespace Ghis.FileWatcherApp.Lib
         {
 
 
+        }
+
+        public void Move(string sourceDirName, string destDirName)
+        {
+            throw new NotImplementedException();
         }
     }
 
