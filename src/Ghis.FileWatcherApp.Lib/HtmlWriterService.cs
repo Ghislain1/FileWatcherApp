@@ -10,8 +10,11 @@ namespace Ghis.FileWatcherApp.Lib;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 enum PageLayout
 {
@@ -21,6 +24,7 @@ enum PageLayout
 public class HtmlWriterService : IWriterService
 {
     private string watcherOutputPath;
+    private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1);
     public HtmlWriterService(string watcherOutputPath)
     {
         this.watcherOutputPath = watcherOutputPath;
@@ -29,31 +33,72 @@ public class HtmlWriterService : IWriterService
     {
 
     }
-    public void PrintLn(FileInfoDataModel fileInfoDataModel)
+
+    private Task<bool> EnsureAccessAsync(FileInfo fileInfo)
     {
-        var fileToCopy = fileInfoDataModel.FullName;
-        var destToCopy = Path.Combine(this.watcherOutputPath, fileInfoDataModel.FileName);
-        var file = new FileInfo(destToCopy);
-        if (File.Exists(destToCopy))
+        return Task.Run(() =>
+        {
+            if (File.Exists(fileInfo.FullName))
+            {
+                fileInfo.Delete();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                File.Delete(fileInfo.FullName);
+                while (IsFileLocked(fileInfo))
+                {
+                    Thread.Sleep(1000);
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();              
+                }
+            }
+
+
+            return true;
+
+        });
+
+    }
+
+    private Task CopyAsync(string fileToCopy, string destToCopy)
+    {
+        return Task.Run(() =>
         {
 
-            while (IsFileLocked(file))
+            if (File.Exists(destToCopy))
+            {
+                File.Delete(destToCopy);
+            }
+
+            File.Copy(fileToCopy, destToCopy);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            while (IsFileLocked(new FileInfo(fileToCopy)))
             {
                 Thread.Sleep(1000);
             }
 
-            file.Delete();
 
-            File.Delete(destToCopy);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-        while (IsFileLocked(file))
+        });
+
+    }
+
+    public async void PrintLn(FileInfoDataModel fileInfoDataModel)
+    {
+        var fileToCopy = fileInfoDataModel.FullName;
+        var destToCopy = Path.Combine(this.watcherOutputPath, fileInfoDataModel.FileName);
+        var fileInfo = new FileInfo(destToCopy);
+        semaphoreSlim.WaitAsync();
+        var accessible = await this.EnsureAccessAsync(fileInfo);
+        semaphoreSlim.Release();
+        if (accessible)
         {
-            Thread.Sleep(1000);
+            semaphoreSlim.WaitAsync();
+            await CopyAsync(fileToCopy, destToCopy);
+            semaphoreSlim.Release();
+            this.UpdateHtmlOutputFiles();
         }
-        File.Copy(fileToCopy, destToCopy);
-        this.UpdateHtmlOutputFiles();
+
+
     }
     private void UpdateHtmlOutputFiles()
     {
@@ -154,12 +199,13 @@ public class HtmlWriterService : IWriterService
             //still being written to
             //or being processed by another thread
             //or does not exist (has already been processed)
+            var curreny = Thread.CurrentThread;
             return true;
         }
         finally
         {
-            if (stream != null)
-                stream.Close();
+
+            stream?.Close();
         }
 
         //file is not locked

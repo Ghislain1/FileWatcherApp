@@ -9,11 +9,13 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Channels;
 using Ghis.FileWatcherApp.Lib.Locking;
+using System.Threading;
 
 
 public class FileWatcherService : IFileWatcherService, IDisposable
 {
     private readonly ILockFileService lockFileService;
+    private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1);
     private FileSystemWatcher? fileSystemWatcher;
     private Action<WatcherChangeTypes, FileInfoDataModel>? onFileInfoDataModelChanged;
     public FileWatcherService(ILockFileService lockFileService)
@@ -22,7 +24,6 @@ public class FileWatcherService : IFileWatcherService, IDisposable
     }
     public void StartWatch(string fullPath, bool includeSubdirectories = true, string filter = "*.txt")
     {
-
         this.fileSystemWatcher = new FileSystemWatcher(fullPath);
         fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes
                        | NotifyFilters.CreationTime
@@ -50,7 +51,7 @@ public class FileWatcherService : IFileWatcherService, IDisposable
         {
             return;
         }
-
+        await semaphoreSlim.WaitAsync();
 
         string message = string.Empty;
 
@@ -68,6 +69,8 @@ public class FileWatcherService : IFileWatcherService, IDisposable
         var fileInfoDataModel = new FileInfoDataModel(e.FullPath, WatcherColorNameTypes.Orange, message, "Changed:");
 
         this.onFileInfoDataModelChanged?.Invoke(e.ChangeType, fileInfoDataModel);
+        semaphoreSlim.Release();
+
     }
 
     private void OnCreated(object sender, FileSystemEventArgs e)
