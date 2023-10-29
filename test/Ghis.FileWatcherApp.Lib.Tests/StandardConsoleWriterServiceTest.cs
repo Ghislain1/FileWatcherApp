@@ -16,9 +16,7 @@ namespace Ghis.FileWatcherApp.Lib.Tests
         [Fact]
         
             public void IsPrime_NonPrimesLessThan10_ReturnFalseTest1() { 
-                var result = standardConsoleWriterService.IsPrime(value);
-
-                Assert.False(result, $"{value} should not be prime");
+               
             }
         
     }

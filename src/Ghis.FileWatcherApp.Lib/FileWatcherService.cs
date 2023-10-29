@@ -15,6 +15,7 @@ using System.Threading;
 public class FileWatcherService : IFileWatcherService, IDisposable
 {
     private readonly ILockFileService lockFileService;
+    private string  fileFilter = @"*.json";
     private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1);
     private FileSystemWatcher? fileSystemWatcher;
     private Action<WatcherChangeTypes, FileInfoDataModel>? onFileInfoDataModelChanged;
@@ -39,7 +40,7 @@ public class FileWatcherService : IFileWatcherService, IDisposable
         fileSystemWatcher.Deleted += OnDeleted;
         fileSystemWatcher.Renamed += OnRenamed;
         fileSystemWatcher.Error += OnError;
-        fileSystemWatcher.Filter = filter;
+        fileSystemWatcher.Filter = "";// All
         fileSystemWatcher.IncludeSubdirectories = includeSubdirectories;
         fileSystemWatcher.EnableRaisingEvents = true;
         Console.WriteLine($"Monitoring ({fullPath}): ");
@@ -51,12 +52,25 @@ public class FileWatcherService : IFileWatcherService, IDisposable
         {
             return;
         }
-        await semaphoreSlim.WaitAsync();
+        // get the file's extension 
+        string strFileExt = Path.GetExtension(e.FullPath);
 
-        string message = string.Empty;
+        // filter file types 
+        //if (Regex.IsMatch(strFileExt,this.fileFilter, RegexOptions.IgnoreCase))
+        //{
+        //    return;
+        //}
+        if (!this.fileFilter.Contains(strFileExt))
+        {
+            return;
+        }
+
+        await semaphoreSlim.WaitAsync();
+      
+
 
         var isFileLock = await this.lockFileService.IsFileLockedAsync(DateTime.Now, e.FullPath);
-
+        var message = string.Empty;
         if (isFileLock)
         {
             message = $"A file {e.Name} is opened in Word and the user saves some changes but does not close the file";

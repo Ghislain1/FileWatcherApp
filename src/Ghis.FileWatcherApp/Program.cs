@@ -16,11 +16,39 @@ using Ghis.FileWatcherApp.Lib.Locking;
 
 public class Program
 {
-    private static readonly string watcherPath = @"C:\Users\Zoe\Documents\SubMain";
-    private static readonly string watcherInputPath = Path.Combine(watcherPath, "WatchInput");
+    private static string fileFilter = @"\.txt)|\.json\";
+    private static string watcherPath = @"C:\Users\Zoe\Documents\SubMain";
+    private static   string watcherInputPath = Path.Combine(watcherPath, "WatchInput");
     private static readonly string watcherOutputPath = Path.Combine(watcherPath, "HtmlOutput");
     static void Main()
     {
+        var sucess = false;
+
+        string? directoryPath;
+        do
+        {
+            Console.Write($"Enter a Directory Path to watch > ");
+            directoryPath = Console.ReadLine();
+            if (string.IsNullOrEmpty(directoryPath))
+            {
+                // Set default
+                directoryPath = watcherInputPath;
+            }
+            if (!string.IsNullOrWhiteSpace(directoryPath) && Directory.Exists(directoryPath))
+            {
+                Console.WriteLine($"You entered the Directory path: {directoryPath}");
+                Console.WriteLine("");
+                sucess = true;
+            }
+            else
+            {
+                Console.WriteLine("No correct Directory path entered. ");
+                Console.WriteLine("");
+            }
+
+        } while (!sucess);
+
+        watcherInputPath = directoryPath!;
         InitialiseApplication();
         RunFolderWatcher(watcherInputPath);
 
@@ -52,34 +80,19 @@ public class Program
     private static void RunFolderWatcher(string directoryPath)
     {
         // var consoleWriterService = new StandardConsoleWriterService();
-        
+
         var lockFileService = new LockFileService();
-        using (var fileWatcherService = new FileWatcherService( lockFileService))
+        using (var fileWatcherService = new FileWatcherService(lockFileService))
         {
-            fileWatcherService.StartWatch(directoryPath, OnFileInfoDataModelChanged, true, "*.txt");
-            
+            fileWatcherService.StartWatch(directoryPath, OnFileInfoDataModelChanged, true, fileFilter);
+
             Console.Read();
             //Make an infinite loop till 'q' is pressed.  
             while (Console.Read() != 'q') ;
 
         }
 
-        //using (FileSystemWatcher watcher = new FileSystemWatcher())
-        //{
-        //    watcher.Path = directoryPath;
 
-        //    watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-
-        //    watcher.Filter = "*.txt";
-
-        //    watcher.Created += OnChanged;
-
-        //    watcher.EnableRaisingEvents = true;
-
-        //    Console.WriteLine("Press 'q' to quit the application");
-
-        //    while (Console.Read() != 'q') ;
-        //}
 
     }
 
@@ -88,12 +101,12 @@ public class Program
 
     private static void OnChanged(object sender, FileSystemEventArgs e)
     {
-    
+
 
     }
 
-  
-   
+
+
 
 
 
